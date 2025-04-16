@@ -1,0 +1,156 @@
+# Common references
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id_sp:
+          type: integer
+          readOnly: true # Returned by HTTP GET
+        ten_sp:
+          type: string
+          description: product name
+        gia_sp:
+          type: string
+          description: price
+        trangthai:
+          type: integer
+          enum: [0, 1]
+          default: 0
+          description: trang thai sp
+        avatar:
+          type: string
+          readOnly: true # Returned by HTTP GET
+          description: contact avatar file path
+        avatarFile:
+          type: string
+          format: binary
+          writeOnly: true # Use in POST/PUT/PATCH
+          discription: contact avatar file
+    PaginationMetadata:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          default: 0
+          description: The total number of records
+        firstPage:
+          type: integer
+          default: 1
+          description: The first page
+        lastPage:
+          type: integer
+          default: 1
+          description: The last page
+        page:
+          type: integer
+          default: 1
+          description: The current page
+        limit:
+          type: integer
+          default: 5
+          description: The number of records per page
+
+  responses:
+    "200NoData":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: The response status
+                enum:
+                  - success
+              data:
+                type: object
+                nullable: true
+                default: null
+                description: The response data
+    "400BadRequest":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: The response status
+                enum:
+                  - error
+              message:
+                type: string
+                description: The error message
+
+    "404NotFound":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: The response status
+                enum:
+                  - error
+              message:
+                type: string
+                description: The error message
+    "405MethodNotAllowed":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: The response status
+                enum:
+                  - error
+              message:
+                type: string
+                description: The error message
+    "500InternalServerError":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: The response status
+                enum:
+                  - error
+              message:
+                type: string
+                description: The error message
+
+  parameters:
+    productIdParam:
+      name: id_sp
+      description: Product ID
+      required: true
+      in: path
+      schema:
+        type: integer
+    limitParam:
+      name: limit
+      description: Number of records per page
+      in: query
+      schema:
+        type: integer
+        default: 5
+        minimum: 1
+        maximum: 100
+      required: false
+
+    pageParam:
+      name: page
+      description: Page number of records
+      in: query
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+      required: false
